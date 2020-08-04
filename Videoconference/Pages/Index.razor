@@ -1,12 +1,19 @@
 ﻿@page "/"
 @page "/{RoomId}"
 
-<h1>Hello, world!</h1>
 
-Welcome to your new app.
+@if (String.IsNullOrEmpty(RoomId))
+{
+    <CreateRoom />
+}
+else
+{
+    <CascadingValue Value="RoomId">
+        <Videoboard />
+    </CascadingValue>
+}
 
 @code {
     [Parameter]
     public string RoomId { get; set; }
-
 }
