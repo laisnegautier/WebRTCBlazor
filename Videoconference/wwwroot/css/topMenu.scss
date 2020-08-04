@@ -1,0 +1,42 @@
+﻿@import 'variables';
+
+.auth {
+    background: none !important;
+    border: 0 !important;
+    z-index: 900;
+
+    a {
+        color: $text-color-main !important;
+        font-weight: bold;
+    }
+
+    .right-menu {
+        height: 100%;
+        padding: 10px 20px;
+        border-radius: 0 0 3px 3px;
+        @include box-shadow;
+        background: $background;
+        border: $border-size solid $border-color;
+        border-top: none;
+        margin: 0;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        color: $text-color-main;
+
+        form {
+            button {
+                background: transparent;
+                color: white;
+                border: none;
+                padding: 0;
+                margin: 0;
+                font-weight: bold;
+
+                &:hover {
+                    text-decoration: underline;
+                }
+            }
+        }
+    }
+}

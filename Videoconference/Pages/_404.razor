@@ -1,0 +1,9 @@
+﻿@page "/404"
+@layout Videoboard
+@inject NavigationManager NavigationManager
+
+<div class="centered-div">
+    <h1>Error 404: Page not found</h1>
+    <p>Sorry, there's nothing at this address.</p>
+    <button class="btn" @onclick="@(() => NavigationManager.NavigateTo("/"))">Go to home page</button>
+</div>
