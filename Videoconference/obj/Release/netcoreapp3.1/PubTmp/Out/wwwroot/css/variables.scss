@@ -1,0 +1,38 @@
+﻿/*THEME*/
+$mainColor: #00A2FF;
+$background: #182127;
+$plate: #293843;
+$foreground: #3F4D5A;
+
+$text-color-main: #f3f3f3;
+$text-color-secondary: #000;
+$border-size: 2px;
+$border-color: #000;
+$border-color-hover: #00A2FF;
+
+@mixin box-shadow {
+    box-shadow: 0 3px 10px #141D25 !important;
+    -moz-box-shadow: 0 3px 10px #141D25 !important;
+    -webkit-box-shadow: 0 3px 10px #141D25 !important;
+}
+
+@mixin box-shadow-hover {
+    box-shadow: 0 3px 20px #141D25 !important;
+    -moz-box-shadow: 0 3px 20px #141D25 !important;
+    -webkit-box-shadow: 0 3px 20px #141D25 !important;
+}
+
+@mixin transition {
+    transition: .1s linear all !important;
+    -o-transition: .1s linear all !important;
+    -webkit-transition: .1s linear all !important;
+    -moz-transition: .1s linear all !important;
+}
+
+@mixin border {
+    border: $border-size solid $border-color;
+}
+
+@mixin border-hover {
+    border: $border-size solid $border-color-hover;
+}

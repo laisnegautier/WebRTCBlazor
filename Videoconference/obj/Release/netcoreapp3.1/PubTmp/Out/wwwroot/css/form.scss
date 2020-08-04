@@ -1,0 +1,121 @@
+﻿@import 'variables';
+
+input[type=text], input[type=password] {
+    @include border;
+    background: $plate !important;
+    color: $text-color-main !important;
+    @include transition;
+
+    &:hover, &:focus, &:active {
+        @include border-hover;
+        background: $foreground !important;
+    }
+}
+
+.btn-toolbar {
+    .input-group-prepend {
+        @include box-shadow;
+
+        .input-group-text {
+            font-weight: bold;
+            font-size: 0.9rem;
+            color: $text-color-main;
+            @include border;
+            border-right-width: 1px;
+            border-radius: 3px 0 0 3px;
+            background: $background;
+        }
+    }
+
+    .btn-group {
+        @include box-shadow;
+
+        .btn {
+            font-weight: bold;
+            border: $border-size solid $border-color;
+            border-left-width: 2px;
+            border-right-width: 1px;
+            @include transition;
+
+            &:last-of-type {
+                border-right-width: 2px;
+            }
+
+            &:disabled {
+                opacity: 1;
+                color: $text-color-secondary;
+                background: $mainColor;
+            }
+
+            &:not([disabled]) {
+                color: $text-color-main;
+                background: $plate;
+            }
+
+            &:hover, &:active, &:focus {
+                color: $text-color-secondary;
+                background: $mainColor;
+            }
+        }
+    }
+
+    input {
+        @include box-shadow;
+    }
+}
+
+/*.btn-group {
+    border-radius: 6px;
+    border: 0;
+
+    .dropdown-toggle {
+        border-right: 2px solid black !important;
+    }
+
+    .btn {
+        color: #000;
+        font-weight: bold;
+        outline: none;
+        border-top: 2px solid black;
+        border-left: 2px solid black;
+        border-right: 1px solid black;
+        border-bottom: 2px solid black;
+
+        &:first-child {
+            border-left: 2px solid black !important;
+        }
+
+        &:disabled {
+            opacity: 1;
+            background-color: #00A2FF;
+        }
+
+        &:not([disabled]) {
+            color: #fff;
+            background-color: #293843;
+        }
+
+        &:hover, &:active, &:focus {
+            color: #000;
+            background-color: #00A2FF !important;
+        }
+    }
+
+    select {
+        border-top: 2px solid black;
+        border-left: 1px solid black;
+        border-right: 2px solid black;
+        border-bottom: 2px solid black;
+        border-radius: 0 3px 3px 0;
+        background-color: #293843;
+        color: #fff;
+        font-weight: bold;
+    }
+}*/
+
+.form-blank {
+    background: none !important;
+    border: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
