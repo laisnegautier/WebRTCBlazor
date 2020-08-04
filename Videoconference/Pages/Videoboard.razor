@@ -38,15 +38,18 @@
     HubConnection HubConnection;
     List<string> groupMessages = new List<string>();
 
+    static Func<string, string, Task> sendIceCandidateFunc;
+
     protected override async Task OnInitializedAsync()
     {
+        sendIceCandidateFunc = SendIceCandidateInvoke;
+
         await InitializeAndAddToHubAsync();
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        await JSRuntime.InvokeVoidAsync("invoke_initWebRTC", RoomId);
-    }
+        => await JSRuntime.InvokeVoidAsync("invoke_initWebRTC", RoomId);
+
 
     async Task InitializeAndAddToHubAsync()
     {
@@ -56,8 +59,9 @@
             .Build();
 
         HubConnection.On<string>("SendMessageToGroup", message => UpdateMessageGroup(message));
-        HubConnection.On<string>("OfferReceived", offer => OnReceiveOffer(offer));
-        HubConnection.On<string>("AnswerReceived", async answer => { UpdateMessageGroup("ta mere"); await JSRuntime.InvokeVoidAsync("invoke_onReceiveAnswer", answer); });
+        HubConnection.On<string>("OfferReceived", async offer => await OnReceiveOffer(offer));
+        HubConnection.On<string>("AnswerReceived", async answer => await OnAnswerReceived(answer));
+        HubConnection.On<string>("IceCandidateReceived", async iceCandidate => await OnIceCandidateReceived(iceCandidate));
 
         // Connection start
         await HubConnection.StartAsync();
@@ -83,4 +87,21 @@
         string answer = await JSRuntime.InvokeAsync<string>("invoke_onReceiveOffer", offer);
         await HubConnection.SendAsync("SendAnswer", answer, RoomId);
     }
+
+    async Task OnAnswerReceived(string answer)
+        => await JSRuntime.InvokeVoidAsync("invoke_onReceiveAnswer", answer);
+ 
+    async Task OnIceCandidateReceived(string iceCandidate)
+        => await JSRuntime.InvokeVoidAsync("invoke_onReceiveIceCandidate", iceCandidate);
+
+
+
+
+    [JSInvokable]
+    public static void SendIceCandidate(string iceCandidate, string roomId)
+        => sendIceCandidateFunc.Invoke(iceCandidate, roomId);
+
+
+    async Task SendIceCandidateInvoke(string iceCandidate, string roomId)
+        => await HubConnection.SendAsync("SendIceCandidate", iceCandidate, RoomId);
 }
