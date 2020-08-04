@@ -7,6 +7,9 @@ let remoteVideo;
 let localStream;
 let peerConnection;
 let peerConnectionConfig = { 'iceServers': [{ 'url': 'stun:stun.services.mozilla.com' }, { 'url': 'stun:stun.l.google.com:19302' }] };
+peerConnection = new RTCPeerConnection(peerConnectionConfig);
+peerConnection.onicecandidate = onDetectIceCandidate;
+peerConnection.onaddstream = gotRemoteStream;
 
 // Cross-platform compatibility
 navigator.getUserMedia = navigator.getUserMedia || navigator.mozGetUserMedia || navigator.webkitGetUserMedia;
@@ -31,7 +34,10 @@ async function getUserMedia() {
             localStream = stream;
             localVideo.srcObject = stream;
 
-            setPeerParameters();
+            //Adding to the peerconnection
+            localStream.getTracks().forEach(track => {
+                peerConnection.addTrack(track, localStream);
+            });
         } catch (error) {
             console.error('Error opening video camera.', error);
         }
@@ -41,19 +47,7 @@ async function getUserMedia() {
     }
 }
 
-// PEER
-function setPeerParameters() {
-    peerConnection = new RTCPeerConnection(peerConnectionConfig);
-    //peerConnection.onicecandidate = gotIceCandidate;
-    //peerConnection.onaddstream = gotRemoteStream;
-
-    //Adding to the peerconnection
-    localStream.getTracks().forEach(track => {
-        peerConnection.addTrack(track, localStream);
-    });
-}
-
-//SENDER CLIENT
+//PAIRING
 async function invoke_createOffer() {
     try {
         const offer = await peerConnection.createOffer();
@@ -62,23 +56,11 @@ async function invoke_createOffer() {
         console.log(offer);
         console.log(peerConnection);
 
-        DotNet.invokeMethodAsync('Videoconference', 'SendOffer', JSON.stringify(offer), roomId);
         console.log("STEP 2: offer sended.");
+        return JSON.stringify(offer);
     } catch (error) {
         console.error('ERROR: creating an offer.', error);
     }
-}
-
-function gotIceCandidate(event) {
-    if (event.candidate != null) {
-        console.log('got candidate');
-        DotNet.invokeMethodAsync('Videoconference', 'SendIceCandidate', JSON.stringify(event.candidate), roomId)
-    }
-}
-
-function gotRemoteStream(event) {
-    console.log('got remote stream');
-    remoteVideo.srcObject = event.stream;
 }
 
 async function invoke_onReceiveOffer(offerString) {
@@ -96,8 +78,8 @@ async function invoke_onReceiveOffer(offerString) {
         console.log("STEP 5: answer created and inserted as local description.");
         console.log(answer);
 
-        DotNet.invokeMethodAsync('Videoconference', 'SendAnswer', JSON.stringify(answer), roomId);
         console.log("STEP 6: answer sended.");
+        return JSON.stringify(answer);
     } catch (error) {
         console.error('ERROR: creating an answer.', error);
     }
@@ -112,10 +94,36 @@ async function invoke_onReceiveAnswer(answerString) {
         await peerConnection.setRemoteDescription(answer);
         console.log("STEP 8: answer inserted as the remote description.");
     } catch (error) {
-        console.error('ERROR: getting the answer.', error);
+        console.error('ERROR: setting the answer.', error);
     }
 }
 
+//ICE
+function onDetectIceCandidate(event) {
+    if (event.candidate != null) {
+        console.log('Sending new candidate');
+        let candidate = new RTCIceCandidate(event.candidate);
+        DotNet.invokeMethodAsync('Videoconference', 'SendIceCandidate', JSON.stringify(candidate), roomId)
+    }
+}
+
+function invoke_onReceiveIceCandidate(iceCandidateString) {
+    let iceCandidate = new RTCIceCandidate(JSON.parse(iceCandidateString));
+    console.log("Ice candidate received");
+
+    peerConnection.addIceCandidate(iceCandidate);
+}
+
+function gotRemoteStream(event) {
+    console.log('got remote stream');
+    remoteVideo.srcObject = event.stream;
+}
+
+
+
+
+
+//OKKKKKKKKKKKKKKKK
 //function gotMessageFromServer(message) {
 //    if (!peerConnection) start(false);
 

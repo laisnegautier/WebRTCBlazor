@@ -21,6 +21,6 @@ namespace Videoconference.Hubs
             => await Clients.OthersInGroup(groupName).SendAsync("AnswerReceived", answer);
 
         public async Task SendIceCandidate(string iceCandidate, string groupName)
-            => await Clients.OthersInGroup(groupName).SendAsync("SendMessageToGroup", iceCandidate);
+            => await Clients.OthersInGroup(groupName).SendAsync("IceCandidateReceived", iceCandidate);
     }
 }
