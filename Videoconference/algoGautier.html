@@ -29,7 +29,7 @@
 
         .video {
             background: #182127;
-            background: linear-gradient(164deg, rgba(24,33,39,1) 0%, rgba(41,56,67,1) 72%, rgba(41,56,67,1) 100%);
+/*            background: linear-gradient(164deg, rgba(24,33,39,1) 0%, rgba(41,56,67,1) 72%, rgba(41,56,67,1) 100%);*/
             
             margin: 0;
             padding: 0;
@@ -40,12 +40,8 @@
                 background: #182127;
             }
 
-            20% {
+            50% {
                 background: #293843;
-            }
-
-            40% {
-                background: #182127;
             }
 
             100% {
@@ -59,7 +55,7 @@
 
     <script type="text/javascript">
 
-        let nbVideos = 3;
+        let nbVideos = 50;
 
         let vpWidth = window.innerWidth;
         let vpHeight = window.innerHeight;
@@ -90,7 +86,7 @@
             listVideo.forEach((video, index, array) => {
                 video.style.width = optimalVideoWidth + "px";
                 video.style.height = optimalVideoHeight + "px";
-                //video.style.animation = "colorchange 5s ease-in-out " + index / 10 + "s infinite alternate";
+                video.style.animation = "colorchange 3s ease-in-out " + index / 10 + "s infinite alternate";
             });
         }
 
