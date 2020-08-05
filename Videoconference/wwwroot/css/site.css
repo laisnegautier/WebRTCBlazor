@@ -1,7 +1,7 @@
 ﻿@import url("open-iconic/font/css/open-iconic-bootstrap.min.css");
 /*THEME*/
 /*THEME*/
-input[type=text], input[type=password] {
+input[type=text], input[type=password], .inputEditForm {
   border: 2px solid #000;
   background: #293843 !important;
   color: #f3f3f3 !important;
@@ -9,7 +9,7 @@ input[type=text], input[type=password] {
   -o-transition: .1s linear all !important;
   -webkit-transition: .1s linear all !important;
   -moz-transition: .1s linear all !important; }
-  input[type=text]:hover, input[type=text]:focus, input[type=text]:active, input[type=password]:hover, input[type=password]:focus, input[type=password]:active {
+  input[type=text]:hover, input[type=text]:focus, input[type=text]:active, input[type=password]:hover, input[type=password]:focus, input[type=password]:active, .inputEditForm:hover, .inputEditForm:focus, .inputEditForm:active {
     border: 2px solid #00A2FF;
     background: #3F4D5A !important; }
 
