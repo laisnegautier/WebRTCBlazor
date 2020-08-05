@@ -13,9 +13,9 @@
             height: 100%;
         }
 
-        #test {
+        .videosPanel {
             width: 100vw;
-            height: 100%;
+            height: 100vh;
             background: #182127;
             display: flex;
             flex-wrap: wrap;
@@ -50,7 +50,7 @@
         }
     </style>
 
-    <div id='test'>
+    <div class="videosPanel">
     </div>
 
     <script type="text/javascript">
@@ -66,7 +66,7 @@
             for (i = 0; i < nbVideos; i++) {
                 var d = document.createElement('div')
                 d.classList.add('video')
-                document.getElementById('test').appendChild(d)
+                document.querySelector('.videosPanel').appendChild(d)
             }
 
             adaptVideos();

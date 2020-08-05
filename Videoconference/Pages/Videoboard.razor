@@ -2,6 +2,13 @@
 @inject NavigationManager NavigationManager
 @using Microsoft.AspNetCore.SignalR.Client
 
+<div class="videoboard">
+    <video id="localVideo" class="video" autoplay muted></video>
+    <video id="remoteVideo" class="video" autoplay></video>
+    @*<button type="button" id="start" @onclick="Call">Start Video</button>*@
+</div>
+
+<div style="display: none">
 <div class="connected-users">
     @*<em>Offer: @receivedRTCOffer</em>
         <em class="small">Answer: @receivedRTCAnswer</em>
@@ -16,19 +23,13 @@
     </ul>
 </div>
 
-<div class="videos">
-    <video id="localVideo" autoplay muted style="border: 8px solid red"></video>
-    <video id="remoteVideo" autoplay style="border: 8px solid yellow"></video>
-    <br />
-    <button type="button" id="start" @onclick="Call">Start Video</button>
-
-    <nav class="navbar fixed-bottom navbar-dark bg-dark toolbarSignalR">
-        <h3 class="navbar-brand">State</h3>
-        <ul>
-            <li>Connection State: <span>@HubConnection.State</span></li>
-            <li>Connection ID: <span>@HubConnection.ConnectionId</span></li>
-        </ul>
-    </nav>
+<nav class="navbar fixed-bottom navbar-dark bg-dark toolbarSignalR">
+    <h3 class="navbar-brand">State</h3>
+    <ul>
+        <li>Connection State: <span>@HubConnection.State</span></li>
+        <li>Connection ID: <span>@HubConnection.ConnectionId</span></li>
+    </ul>
+</nav>
 </div>
 
 @code {
@@ -48,7 +49,16 @@
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
-        => await JSRuntime.InvokeVoidAsync("invoke_initWebRTC", RoomId);
+    {
+        await JSRuntime.InvokeVoidAsync("invoke_initWebRTC", RoomId);
+
+        // Very important to not load this twice
+        if (firstRender)
+        {
+            await JSRuntime.InvokeVoidAsync("initializeGrid");
+            await Call();
+        }
+    }
 
 
     async Task InitializeAndAddToHubAsync()
@@ -90,7 +100,7 @@
 
     async Task OnAnswerReceived(string answer)
         => await JSRuntime.InvokeVoidAsync("invoke_onReceiveAnswer", answer);
- 
+
     async Task OnIceCandidateReceived(string iceCandidate)
         => await JSRuntime.InvokeVoidAsync("invoke_onReceiveIceCandidate", iceCandidate);
 
