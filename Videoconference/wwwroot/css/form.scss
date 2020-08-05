@@ -1,6 +1,6 @@
 ﻿@import 'variables';
 
-input[type=text], input[type=password] {
+input[type=text], input[type=password], .inputEditForm {
     @include border;
     background: $plate !important;
     color: $text-color-main !important;

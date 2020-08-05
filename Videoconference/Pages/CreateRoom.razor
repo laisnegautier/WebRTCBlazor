@@ -1,33 +1,36 @@
 ﻿@inject NavigationManager NavigationManager
+@using System.ComponentModel.DataAnnotations
 
 <div class="centered-div">
     <h1>Start a Videoconference</h1>
 
-    <label for="basic-url">Create a room by writing a name</label>
-    <div class="input-group mb-3">
-        <div class="input-group-prepend">
-            <span class="input-group-text" id="basic-addon3">@NavigationManager.BaseUri</span>
-        </div>
-        <input value="@createdRoomId" @oninput="FormatingRoomSlug" type="text" class="form-control" id="basic-url" aria-describedby="basic-addon3">
-    </div>
-    @if (!roomInputIsValid)
-    {
-        <strong>Some characters are not allowed</strong>
-    }
-    <button class="btn" disabled="@(!roomInputIsValid)" @onclick="CreateAndStartVideoconference">Launch the videoconference</button>
+    <EditForm Model="model" OnValidSubmit="CreateAndStartVideoconference">
+        <DataAnnotationsValidator />
 
+        <label for="inputTextRoom">Choose a name for your videoconference or join an already existing one.</label>
+        <div class="input-group mb-3">
+            <InputText id="inputTextRoom" @bind-Value="model.RoomId" placeholder="Videoconference name" class="inputEditForm form-control" />
+        </div>
+        <ValidationMessage For="() => model.RoomId" class="pb-3" />
+
+        <button type="submit" class="btn">Create or Join</button>
+    </EditForm>
 </div>
 
 @code {
     string createdRoomId = "";
     bool roomInputIsValid = true;
 
-    void FormatingRoomSlug(ChangeEventArgs e)
+    Model model = new Model();
+    class Model
     {
-        createdRoomId = (e.Value.ToString()).ToUpper();
-        roomInputIsValid = Uri.IsWellFormedUriString(NavigationManager.BaseUri + createdRoomId, UriKind.RelativeOrAbsolute);
+        [Required(ErrorMessage = "Insert a videoconference name.")]
+        [MinLength(5, ErrorMessage = "At least 5 characters must be inserted.")]
+        [MaxLength(20, ErrorMessage = "Insert less than 20 characters.")]
+        [RegularExpression(@"^[a-zA-Z0-9-_+]{0,}$", ErrorMessage = "Only letters (no accent), numbers and -+_ symbols are allowed.")]
+        public string RoomId { get; set; }
     }
 
     void CreateAndStartVideoconference()
-        => NavigationManager.NavigateTo(NavigationManager.BaseUri + createdRoomId);
+        => NavigationManager.NavigateTo(NavigationManager.BaseUri + model.RoomId);
 }
