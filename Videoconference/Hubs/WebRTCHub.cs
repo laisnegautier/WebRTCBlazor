@@ -82,28 +82,22 @@ namespace Videoconference.Hubs
             HubHelpers.ConnectedClients.Add(clientIds);
         }
 
+        public async Task SendIceCandidate(string iceCandidate, string sender, string receiver)
+            => await Clients.Client(receiver).SendAsync("IceCandidateReceived", iceCandidate, sender);
+
         //To use when adding, removing or else with the list of clients
         public async Task NotifyChangeInConnectedClientsInRoom(string roomId)
             => await Clients.Group(roomId).SendAsync("NotificationChangeInConnectedClientsInRoom");
 
         public async Task SendOffer(string offer, string clientOffering, string clientAnswering)
-            => await Clients.Client(clientAnswering).SendAsync("OfferReceived", offer, clientOffering, clientAnswering);
+            => await Clients.Client(clientAnswering).SendAsync("OfferReceived", offer, clientOffering);
 
         public async Task SendAnswer(string answer, string clientOffering, string clientAnswering)
-            => await Clients.Client(clientOffering).SendAsync("AnswerReceived", answer, clientOffering, clientAnswering);
+            => await Clients.Client(clientOffering).SendAsync("AnswerReceived", answer, clientAnswering);
 
-        //public async Task NotifyGroupOfNewClient(string connectionId)
         //3
         public async Task MessageToGroup(string message, string groupName)
             => await Clients.Group(groupName).SendAsync("SendMessageToGroup", message);
         
-        //public async Task SendOffer(string offer, string groupName)
-        //    => await Clients.OthersInGroup(groupName).SendAsync("OfferReceived", offer);
-
-        //public async Task SendAnswer(string answer, string groupName)
-        //    => await Clients.OthersInGroup(groupName).SendAsync("AnswerReceived", answer);
-
-        public async Task SendIceCandidate(string iceCandidate, string groupName)
-            => await Clients.OthersInGroup(groupName).SendAsync("IceCandidateReceived", iceCandidate);
     }
 }

@@ -1,10 +1,3 @@
-/**
- * When a client enters a room:
- *      1/ configure its own media
- *      2/ prepare his peering connection
- *      2/ check all the other clients
- */
-
 interface Room { roomId: string; }
 
 class Client {
@@ -39,13 +32,6 @@ class Client {
         }
     }
 
-    addTracksToPeerConnection(peerConnection: RTCPeerConnection): void {
-        //Adding to the peerconnection
-        this.localStream.getTracks().forEach(track => {
-            peerConnection.addTrack(track, this.localStream);
-        });
-    }
-
     addRemoteVideo(): void {
     }
 
@@ -54,6 +40,8 @@ class Client {
     }
 
     getPeeringByAnsweringClient(clientAnswering: string) {
+        //console.log("LOOOOOOP");
+        //this.peerings.forEach(x => console.log(x));
         return this.peerings.find(x => x.clientAnswering === clientAnswering);
     }
 }
@@ -63,6 +51,8 @@ class Peering {
     clientOffering: string;
     clientAnswering: string;
 
+    remoteVideo: HTMLMediaElement;
+
     peerConnectionConfig: RTCConfiguration;
     peerConnection: RTCPeerConnection;
 
@@ -71,13 +61,36 @@ class Peering {
         this.clientAnswering = clientAnswering;
         this.peerConnectionConfig = { 'iceServers': [{ 'urls': 'stun:stun.services.mozilla.com' }, { 'urls': 'stun:stun.l.google.com:19302' }] };
         this.peerConnection = new RTCPeerConnection(this.peerConnectionConfig);
+
+        this.remoteVideo = document.querySelector("#remoteVideo");
+        this.peerConnection.onicecandidate = (event) => this.onDetectIceCandidate(event, this);
+        this.peerConnection.ontrack = (event) => this.gotRemoteStream(event, this);
+    }
+
+    onDetectIceCandidate(event: any, peeringObj: Peering) {
+        if (event.candidate != null) {
+            console.log('ice candidate sent');
+            let candidate = new RTCIceCandidate(event.candidate);
+            (window as any).DotNet.invokeMethodAsync('Videoconference', 'SendIceCandidate', JSON.stringify(candidate), peeringObj.clientOffering, peeringObj.clientAnswering);
+        }
+    }
+
+    addTracksToPeerConnection(stream: MediaStream): void {
+        //Adding to the peerconnection
+        stream.getTracks().forEach(track => {
+            this.peerConnection.addTrack(track, stream);
+        });
+    }
+
+    gotRemoteStream(event, peeringObj: Peering): void {
+        console.log('got remote stream');
+        peeringObj.remoteVideo.srcObject = event.streams[0];
     }
 
     //Pairing through signaling
     async createOffer(): Promise<RTCSessionDescriptionInit> {
         console.log(this.peerConnection);
         try {
-
             const offer = await this.peerConnection.createOffer();
             await this.peerConnection.setLocalDescription(offer);
             console.log("STEP 1: offer created and inserted as local description.");
@@ -106,12 +119,6 @@ class Peering {
             console.error('ERROR: creating an answer.', error);
         }
     }
-
-    receiveOffer(): void {
-    }
-
-    sendAnswer(): void {
-    }
 }
 
 let client: Client;
@@ -119,15 +126,16 @@ let client: Client;
 //Invokable functions
 async function invokable_initClient(connectionId: string, roomId: string): Promise<void> {
     console.log("INVOKABLE: initClient");
-
     client = new Client(connectionId, { roomId: roomId });
     await client.getUserMedia();
 }
 
+//to initialize the peering object with the answering client id in it
 async function invokable_createPeeringsForOfferingClient(clientAnswering: string): Promise<void> {
     console.log("INVOKABLE: peering between " + client.connectionId + " and " + clientAnswering);
 
     let peering: Peering = new Peering(client.connectionId, clientAnswering);
+    peering.addTracksToPeerConnection(client.localStream);
     client.peerings.push(peering);
 }
 
@@ -140,12 +148,12 @@ async function invokable_createOffer(clientAnswering: string): Promise<string> {
     return JSON.stringify(offerObj);
 }
 
-async function invokable_createAnswer(offer: string, clientOffering: string, clientAnswering: string): Promise<string> {
+async function invokable_createAnswer(offer: string, clientOffering: string): Promise<string> {
     console.log("INVOKABLE: create answer");
     console.log("------ STEP 4: offer inserted as the remote description.");
-    console.log("THIS IS CLIENT :");
-    console.log("THIS IS CLIENT answer :" + clientAnswering);
-    let peering: Peering = new Peering(clientOffering, clientAnswering);
+    console.log("THIS IS CLIENT answer :" + client.connectionId);
+    let peering: Peering = new Peering(clientOffering, client.connectionId);
+    peering.addTracksToPeerConnection(client.localStream);
 
     let offerObj = new RTCSessionDescription(JSON.parse(offer));
 
@@ -162,12 +170,31 @@ async function invokable_createAnswer(offer: string, clientOffering: string, cli
 async function invokable_finalizePeering(answer: string, clientAnswering: string): Promise<void> {
     console.log("INVOKABLE: finalizing peering");
 
+    //console.log(JSON.stringify(client));
     let peering: Peering = client.getPeeringByAnsweringClient(clientAnswering);
 
     console.log("STEP 7: answer received.");
     let answerObj = new RTCSessionDescription(JSON.parse(answer));
+    console.log(answerObj);
+
     await peering.peerConnection.setRemoteDescription(answerObj);
 
     console.log("FINAL");
     console.log(peering);
+}
+
+async function invokable_onReceiveIceCandidate(iceCandidate: string, sender: string): Promise<void> {
+    let iceCandidateObj = new RTCIceCandidate(JSON.parse(iceCandidate));
+    console.log("Ice candidate received");
+
+    let peering: Peering;
+    if (client.getPeeringByAnsweringClient(sender) !== null) {
+        peering = client.getPeeringByOfferingClient(sender);
+    }
+    else {
+        peering = client.getPeeringByAnsweringClient(sender);
+    }
+
+    console.log(peering);
+    peering.peerConnection.addIceCandidate(iceCandidateObj);
 }

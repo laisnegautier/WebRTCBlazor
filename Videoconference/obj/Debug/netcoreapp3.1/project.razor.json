@@ -62,14 +62,14 @@
       },
       {
         "Kind": "Components.Component",
-        "Name": "Videoconference.Pages.Videoboard",
+        "Name": "Videoconference.Pages.CreateRoom",
         "AssemblyName": "Videoconference",
         "Documentation": null,
         "TagOutputHint": null,
         "CaseSensitive": true,
         "TagMatchingRules": [
           {
-            "TagName": "Videoboard",
+            "TagName": "CreateRoom",
             "ParentTag": null,
             "TagStructure": 0,
             "Attributes": [],
@@ -81,19 +81,19 @@
         "Diagnostics": [],
         "Metadata": {
           "Runtime.Name": "Components.IComponent",
-          "Common.TypeName": "Videoconference.Pages.Videoboard"
+          "Common.TypeName": "Videoconference.Pages.CreateRoom"
         }
       },
       {
         "Kind": "Components.Component",
-        "Name": "Videoconference.Pages.Videoboard",
+        "Name": "Videoconference.Pages.CreateRoom",
         "AssemblyName": "Videoconference",
         "Documentation": null,
         "TagOutputHint": null,
         "CaseSensitive": true,
         "TagMatchingRules": [
           {
-            "TagName": "Videoconference.Pages.Videoboard",
+            "TagName": "Videoconference.Pages.CreateRoom",
             "ParentTag": null,
             "TagStructure": 0,
             "Attributes": [],
@@ -105,56 +105,88 @@
         "Diagnostics": [],
         "Metadata": {
           "Runtime.Name": "Components.IComponent",
-          "Common.TypeName": "Videoconference.Pages.Videoboard",
+          "Common.TypeName": "Videoconference.Pages.CreateRoom",
           "Components.NameMatch": "Components.FullyQualifiedNameMatch"
         }
       },
       {
         "Kind": "Components.Component",
-        "Name": "Videoconference.Pages._404",
+        "Name": "Videoconference.Pages.CreateUserName",
         "AssemblyName": "Videoconference",
         "Documentation": null,
         "TagOutputHint": null,
         "CaseSensitive": true,
         "TagMatchingRules": [
           {
-            "TagName": "_404",
+            "TagName": "CreateUserName",
             "ParentTag": null,
             "TagStructure": 0,
             "Attributes": [],
             "Diagnostics": []
           }
         ],
-        "BoundAttributes": [],
+        "BoundAttributes": [
+          {
+            "Kind": "Components.Component",
+            "Name": "OnUserNameSet",
+            "TypeName": "Microsoft.AspNetCore.Components.EventCallback<System.String>",
+            "IsEnum": false,
+            "IndexerNamePrefix": null,
+            "IndexerTypeName": null,
+            "Documentation": null,
+            "Diagnostics": [],
+            "Metadata": {
+              "Common.PropertyName": "OnUserNameSet",
+              "Components.EventCallback": "True"
+            },
+            "BoundAttributeParameters": []
+          }
+        ],
         "AllowedChildTags": [],
         "Diagnostics": [],
         "Metadata": {
           "Runtime.Name": "Components.IComponent",
-          "Common.TypeName": "Videoconference.Pages._404"
+          "Common.TypeName": "Videoconference.Pages.CreateUserName"
         }
       },
       {
         "Kind": "Components.Component",
-        "Name": "Videoconference.Pages._404",
+        "Name": "Videoconference.Pages.CreateUserName",
         "AssemblyName": "Videoconference",
         "Documentation": null,
         "TagOutputHint": null,
         "CaseSensitive": true,
         "TagMatchingRules": [
           {
-            "TagName": "Videoconference.Pages._404",
+            "TagName": "Videoconference.Pages.CreateUserName",
             "ParentTag": null,
             "TagStructure": 0,
             "Attributes": [],
             "Diagnostics": []
           }
         ],
-        "BoundAttributes": [],
+        "BoundAttributes": [
+          {
+            "Kind": "Components.Component",
+            "Name": "OnUserNameSet",
+            "TypeName": "Microsoft.AspNetCore.Components.EventCallback<System.String>",
+            "IsEnum": false,
+            "IndexerNamePrefix": null,
+            "IndexerTypeName": null,
+            "Documentation": null,
+            "Diagnostics": [],
+            "Metadata": {
+              "Common.PropertyName": "OnUserNameSet",
+              "Components.EventCallback": "True"
+            },
+            "BoundAttributeParameters": []
+          }
+        ],
         "AllowedChildTags": [],
         "Diagnostics": [],
         "Metadata": {
           "Runtime.Name": "Components.IComponent",
-          "Common.TypeName": "Videoconference.Pages._404",
+          "Common.TypeName": "Videoconference.Pages.CreateUserName",
           "Components.NameMatch": "Components.FullyQualifiedNameMatch"
         }
       },
@@ -288,14 +320,14 @@
       },
       {
         "Kind": "Components.Component",
-        "Name": "Videoconference.Pages.CreateRoom",
+        "Name": "Videoconference.Pages.Videoboard",
         "AssemblyName": "Videoconference",
         "Documentation": null,
         "TagOutputHint": null,
         "CaseSensitive": true,
         "TagMatchingRules": [
           {
-            "TagName": "CreateRoom",
+            "TagName": "Videoboard",
             "ParentTag": null,
             "TagStructure": 0,
             "Attributes": [],
@@ -307,19 +339,19 @@
         "Diagnostics": [],
         "Metadata": {
           "Runtime.Name": "Components.IComponent",
-          "Common.TypeName": "Videoconference.Pages.CreateRoom"
+          "Common.TypeName": "Videoconference.Pages.Videoboard"
         }
       },
       {
         "Kind": "Components.Component",
-        "Name": "Videoconference.Pages.CreateRoom",
+        "Name": "Videoconference.Pages.Videoboard",
         "AssemblyName": "Videoconference",
         "Documentation": null,
         "TagOutputHint": null,
         "CaseSensitive": true,
         "TagMatchingRules": [
           {
-            "TagName": "Videoconference.Pages.CreateRoom",
+            "TagName": "Videoconference.Pages.Videoboard",
             "ParentTag": null,
             "TagStructure": 0,
             "Attributes": [],
@@ -331,7 +363,163 @@
         "Diagnostics": [],
         "Metadata": {
           "Runtime.Name": "Components.IComponent",
-          "Common.TypeName": "Videoconference.Pages.CreateRoom",
+          "Common.TypeName": "Videoconference.Pages.Videoboard",
+          "Components.NameMatch": "Components.FullyQualifiedNameMatch"
+        }
+      },
+      {
+        "Kind": "Components.Component",
+        "Name": "Videoconference.Pages.Videoboard2",
+        "AssemblyName": "Videoconference",
+        "Documentation": null,
+        "TagOutputHint": null,
+        "CaseSensitive": true,
+        "TagMatchingRules": [
+          {
+            "TagName": "Videoboard2",
+            "ParentTag": null,
+            "TagStructure": 0,
+            "Attributes": [],
+            "Diagnostics": []
+          }
+        ],
+        "BoundAttributes": [
+          {
+            "Kind": "Components.Component",
+            "Name": "RoomId",
+            "TypeName": "System.String",
+            "IsEnum": false,
+            "IndexerNamePrefix": null,
+            "IndexerTypeName": null,
+            "Documentation": null,
+            "Diagnostics": [],
+            "Metadata": {
+              "Common.PropertyName": "RoomId"
+            },
+            "BoundAttributeParameters": []
+          },
+          {
+            "Kind": "Components.Component",
+            "Name": "UserName",
+            "TypeName": "System.String",
+            "IsEnum": false,
+            "IndexerNamePrefix": null,
+            "IndexerTypeName": null,
+            "Documentation": null,
+            "Diagnostics": [],
+            "Metadata": {
+              "Common.PropertyName": "UserName"
+            },
+            "BoundAttributeParameters": []
+          }
+        ],
+        "AllowedChildTags": [],
+        "Diagnostics": [],
+        "Metadata": {
+          "Runtime.Name": "Components.IComponent",
+          "Common.TypeName": "Videoconference.Pages.Videoboard2"
+        }
+      },
+      {
+        "Kind": "Components.Component",
+        "Name": "Videoconference.Pages.Videoboard2",
+        "AssemblyName": "Videoconference",
+        "Documentation": null,
+        "TagOutputHint": null,
+        "CaseSensitive": true,
+        "TagMatchingRules": [
+          {
+            "TagName": "Videoconference.Pages.Videoboard2",
+            "ParentTag": null,
+            "TagStructure": 0,
+            "Attributes": [],
+            "Diagnostics": []
+          }
+        ],
+        "BoundAttributes": [
+          {
+            "Kind": "Components.Component",
+            "Name": "RoomId",
+            "TypeName": "System.String",
+            "IsEnum": false,
+            "IndexerNamePrefix": null,
+            "IndexerTypeName": null,
+            "Documentation": null,
+            "Diagnostics": [],
+            "Metadata": {
+              "Common.PropertyName": "RoomId"
+            },
+            "BoundAttributeParameters": []
+          },
+          {
+            "Kind": "Components.Component",
+            "Name": "UserName",
+            "TypeName": "System.String",
+            "IsEnum": false,
+            "IndexerNamePrefix": null,
+            "IndexerTypeName": null,
+            "Documentation": null,
+            "Diagnostics": [],
+            "Metadata": {
+              "Common.PropertyName": "UserName"
+            },
+            "BoundAttributeParameters": []
+          }
+        ],
+        "AllowedChildTags": [],
+        "Diagnostics": [],
+        "Metadata": {
+          "Runtime.Name": "Components.IComponent",
+          "Common.TypeName": "Videoconference.Pages.Videoboard2",
+          "Components.NameMatch": "Components.FullyQualifiedNameMatch"
+        }
+      },
+      {
+        "Kind": "Components.Component",
+        "Name": "Videoconference.Pages._404",
+        "AssemblyName": "Videoconference",
+        "Documentation": null,
+        "TagOutputHint": null,
+        "CaseSensitive": true,
+        "TagMatchingRules": [
+          {
+            "TagName": "_404",
+            "ParentTag": null,
+            "TagStructure": 0,
+            "Attributes": [],
+            "Diagnostics": []
+          }
+        ],
+        "BoundAttributes": [],
+        "AllowedChildTags": [],
+        "Diagnostics": [],
+        "Metadata": {
+          "Runtime.Name": "Components.IComponent",
+          "Common.TypeName": "Videoconference.Pages._404"
+        }
+      },
+      {
+        "Kind": "Components.Component",
+        "Name": "Videoconference.Pages._404",
+        "AssemblyName": "Videoconference",
+        "Documentation": null,
+        "TagOutputHint": null,
+        "CaseSensitive": true,
+        "TagMatchingRules": [
+          {
+            "TagName": "Videoconference.Pages._404",
+            "ParentTag": null,
+            "TagStructure": 0,
+            "Attributes": [],
+            "Diagnostics": []
+          }
+        ],
+        "BoundAttributes": [],
+        "AllowedChildTags": [],
+        "Diagnostics": [],
+        "Metadata": {
+          "Runtime.Name": "Components.IComponent",
+          "Common.TypeName": "Videoconference.Pages._404",
           "Components.NameMatch": "Components.FullyQualifiedNameMatch"
         }
       },
@@ -20999,6 +21187,16 @@
     {
       "FilePath": "c:\\Users\\Gautier\\source\\repos\\KarmaFlights\\Videoconference\\Videoconference\\Shared\\MainLayout.razor",
       "TargetPath": "Shared\\MainLayout.razor",
+      "FileKind": "component"
+    },
+    {
+      "FilePath": "c:\\Users\\Gautier\\source\\repos\\KarmaFlights\\Videoconference\\Videoconference\\Pages\\Videoboard2.razor",
+      "TargetPath": "Pages\\Videoboard2.razor",
+      "FileKind": "component"
+    },
+    {
+      "FilePath": "c:\\Users\\Gautier\\source\\repos\\KarmaFlights\\Videoconference\\Videoconference\\Pages\\CreateUserName.razor",
+      "TargetPath": "Pages\\CreateUserName.razor",
       "FileKind": "component"
     },
     {
