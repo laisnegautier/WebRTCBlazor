@@ -11,13 +11,14 @@
     </div>
 }
 else
-{
+{ 
+    <button class="btn" @onclick="CallEveryone">CALL</button>
+
     <div class="videoboard">
         <video id="localVideo" class="video" autoplay muted></video>
         <video id="remoteVideo" class="video" autoplay></video>
         @*<button type="button" id="start" @onclick="Call">Start Video</button>*@
     </div>
-
 
     <div class="toolbar-connectivity">
         <ul>
@@ -26,7 +27,6 @@ else
             <li><button class="btn"><span class="oi oi-microphone" aria-hidden="true"></span> Disable microphone</button></li>
             <li><button class="btn" @onclick="LeaveVideoconference"><span class="oi oi-circle-x" aria-hidden="true"></span> Quit the videoconference</button></li>
         </ul>
-
     </div>
     <div style="">
         <div class="connected-users">
@@ -36,6 +36,10 @@ else
                 <strong>@RTCOffer</strong>*@
             <h3>Group state</h3>
             <ul class="list-unstyled">
+                @foreach (ClientIds client in ClientsInRoom)
+                {
+                    <li>@client.UserName (roomId @client.RoomId)</li>
+                }
                 @foreach (string message in groupMessages)
                 {
                     <li>@message</li>
@@ -46,6 +50,7 @@ else
         <nav class="navbar fixed-bottom navbar-dark bg-dark toolbarSignalR">
             <h3 class="navbar-brand">State</h3>
             <ul>
+                <li>RoomID: @RoomId</li>
                 <li>UserName: @UserName</li>
                 <li>Connection State: <span>@HubConnection.State</span></li>
                 <li>Connection ID: <span>@HubConnection.ConnectionId</span></li>
@@ -55,13 +60,13 @@ else
 }
 
 @code {
-    [CascadingParameter]
+    [Parameter]
     public string RoomId { get; set; }
 
-    [CascadingParameter]
+    [Parameter]
     public string UserName { get; set; }
 
-    ClientIds ClientIds;
+    HashSet<ClientIds> ClientsInRoom = new HashSet<ClientIds>();
 
     bool videoconferenceManuallyClosed = false;
 
@@ -75,22 +80,17 @@ else
         sendIceCandidateFunc = SendIceCandidateInvoke;
 
         await InitializeAndAddToHubAsync();
-
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        await JSRuntime.InvokeVoidAsync("invokable_initClient", HubConnection.ConnectionId, RoomId);
 
         // Very important to not load this twice
         if (firstRender)
         {
-            //when connecting, add himself to every other peer client
-            //await JSRuntime.InvokeVoidAsync("invokable_showYourselfToPeerClients", HubConnection.ConnectionId, RoomId);
-
+            await JSRuntime.InvokeVoidAsync("invokable_initClient", HubConnection.ConnectionId, RoomId);
 
             await JSRuntime.InvokeVoidAsync("initializeGrid");
-            await Call();
         }
     }
 
@@ -108,12 +108,9 @@ else
 
         await ConnectToHub(HubConnection);
 
-        ClientIds = new ClientIds(RoomId, HubConnection.ConnectionId, UserName);
-
         // Adding the connection id to the group
-        await HubConnection.SendAsync("AddToGroup", HubConnection.ConnectionId, RoomId);
-        // Add to the set of all members
-        HubHelpers.ConnectedIds.Add(ClientIds);
+        await HubConnection.SendAsync("AddToGroup", RoomId, HubConnection.ConnectionId, UserName);
+        await HubConnection.SendAsync("NotifyChangeInConnectedClientsInRoom", RoomId);
     }
 
     async Task ConnectToHub(HubConnection hubConnection)
@@ -126,10 +123,13 @@ else
 
     void ConfigureHubHandlers(HubConnection hubConnection)
     {
+        HubConnection.On("NotificationChangeInConnectedClientsInRoom", () => UpdateListConnectedClientsInRoom());
+
         HubConnection.On<string>("SendMessageToGroup", message => UpdateMessageGroup(message));
-        HubConnection.On<string>("OfferReceived", async offer => await OnReceiveOffer(offer));
-        HubConnection.On<string>("AnswerReceived", async answer => await OnAnswerReceived(answer));
-        HubConnection.On<string>("IceCandidateReceived", async iceCandidate => await OnIceCandidateReceived(iceCandidate));
+
+        HubConnection.On<string, string, string>("OfferReceived", async (offer, clientOffering, clientAnswering) => await OnReceiveOffer(offer, clientOffering, clientAnswering));
+        HubConnection.On<string, string, string>("AnswerReceived", async (answer, clientOffering, clientAnswering) => await OnAnswerReceived(answer, clientOffering, clientAnswering));
+        //HubConnection.On<string>("IceCandidateReceived", async iceCandidate => await OnIceCandidateReceived(iceCandidate));
     }
 
     void ConfigureHubLifeCycle(HubConnection hubConnection)
@@ -179,26 +179,52 @@ else
         await ConnectToHub(HubConnection);
     }
 
+    void UpdateListConnectedClientsInRoom()
+    {
+        //ClientsInRoom = HubHelpers.GetConnectedClientsInRoom(RoomId);
+        ClientsInRoom = HubHelpers.ConnectedClients;
+        StateHasChanged();
+    }
+
     void UpdateMessageGroup(string message)
     {
         groupMessages.Add(message);
         StateHasChanged();
     }
 
-    async Task Call()
+    async Task CallEveryone()
     {
-        string offer = await JSRuntime.InvokeAsync<string>("invoke_createOffer");
-        await HubConnection.SendAsync("SendOffer", offer, RoomId);
+        string clientOffering;
+        string clientAnswering;
+
+        foreach (ClientIds client in ClientsInRoom)
+        {
+            if (client.ConnectionId != HubConnection.ConnectionId)
+            {
+                clientOffering = HubConnection.ConnectionId;
+                clientAnswering = client.ConnectionId;
+
+                await JSRuntime.InvokeVoidAsync("invokable_createPeeringsForOfferingClient", clientAnswering);
+                string offer = await JSRuntime.InvokeAsync<string>("invokable_createOffer", clientAnswering);
+                await HubConnection.SendAsync("SendOffer", offer, clientOffering, clientAnswering);
+            }
+        }
     }
 
-    async Task OnReceiveOffer(string offer)
+    async Task OnReceiveOffer(string offer, string clientOffering, string clientAnswering)
     {
-        string answer = await JSRuntime.InvokeAsync<string>("invoke_onReceiveOffer", offer);
-        await HubConnection.SendAsync("SendAnswer", answer, RoomId);
+        string answer = await JSRuntime.InvokeAsync<string>("invokable_createAnswer", offer, clientOffering, clientAnswering);
+        await HubConnection.SendAsync("SendAnswer", answer, clientOffering, clientAnswering);
     }
 
-    async Task OnAnswerReceived(string answer)
-        => await JSRuntime.InvokeVoidAsync("invoke_onReceiveAnswer", answer);
+    async Task OnAnswerReceived(string answer, string clientOffering, string clientAnswering)
+    {
+        await JSRuntime.InvokeVoidAsync("invokable_finalizePeering", answer, clientAnswering);
+    }
+
+
+
+
 
     async Task OnIceCandidateReceived(string iceCandidate)
         => await JSRuntime.InvokeVoidAsync("invoke_onReceiveIceCandidate", iceCandidate);

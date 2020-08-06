@@ -27,11 +27,10 @@ namespace Videoconference.Hubs
     public static class HubHelpers
     {
         //Hashset of <roomId, connectionId, userName>
-        public static HashSet<ClientIds> ConnectedIds = new HashSet<ClientIds>();
+        public static HashSet<ClientIds> ConnectedClients = new HashSet<ClientIds>();
         
-        [JSInvokable]
-        public static HashSet<ClientIds> GetConnectedIds(string roomId)
-            => ConnectedIds.Where(x => x.RoomId == roomId).ToHashSet();
+        public static HashSet<ClientIds> GetConnectedClientsInRoom(string roomId)
+            => ConnectedClients.Where(x => x.RoomId == roomId).ToHashSet();
 
         public static async Task<bool> ConnectWithRetryAsync(HubConnection hubConnection, CancellationToken token)
         {
@@ -68,25 +67,41 @@ namespace Videoconference.Hubs
 
         public override async Task OnDisconnectedAsync(Exception exception)
         {
-            HubHelpers.ConnectedIds.RemoveWhere(x => x.ConnectionId == Context.ConnectionId);
+            //doesnt work
+            //HubHelpers.ConnectedClients.Remove(currentClient);
             await base.OnDisconnectedAsync(exception);
         }
 
-
         //1
-        public async Task AddToGroup(string connectionId, string groupName)
-            => await Groups.AddToGroupAsync(connectionId, groupName); 
+        public async Task AddToGroup(string roomId, string connectionId, string userName)
+        {
+            await Groups.AddToGroupAsync(connectionId, roomId);
+            Console.WriteLine("connectionId +" + connectionId + " in room " + roomId);
+
+            ClientIds clientIds = new ClientIds(roomId, connectionId, userName);
+            HubHelpers.ConnectedClients.Add(clientIds);
+        }
+
+        //To use when adding, removing or else with the list of clients
+        public async Task NotifyChangeInConnectedClientsInRoom(string roomId)
+            => await Clients.Group(roomId).SendAsync("NotificationChangeInConnectedClientsInRoom");
+
+        public async Task SendOffer(string offer, string clientOffering, string clientAnswering)
+            => await Clients.Client(clientAnswering).SendAsync("OfferReceived", offer, clientOffering, clientAnswering);
+
+        public async Task SendAnswer(string answer, string clientOffering, string clientAnswering)
+            => await Clients.Client(clientOffering).SendAsync("AnswerReceived", answer, clientOffering, clientAnswering);
 
         //public async Task NotifyGroupOfNewClient(string connectionId)
         //3
         public async Task MessageToGroup(string message, string groupName)
             => await Clients.Group(groupName).SendAsync("SendMessageToGroup", message);
         
-        public async Task SendOffer(string offer, string groupName)
-            => await Clients.OthersInGroup(groupName).SendAsync("OfferReceived", offer);
+        //public async Task SendOffer(string offer, string groupName)
+        //    => await Clients.OthersInGroup(groupName).SendAsync("OfferReceived", offer);
 
-        public async Task SendAnswer(string answer, string groupName)
-            => await Clients.OthersInGroup(groupName).SendAsync("AnswerReceived", answer);
+        //public async Task SendAnswer(string answer, string groupName)
+        //    => await Clients.OthersInGroup(groupName).SendAsync("AnswerReceived", answer);
 
         public async Task SendIceCandidate(string iceCandidate, string groupName)
             => await Clients.OthersInGroup(groupName).SendAsync("IceCandidateReceived", iceCandidate);
