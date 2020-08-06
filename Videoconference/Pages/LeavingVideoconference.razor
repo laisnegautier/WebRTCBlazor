@@ -1,0 +1,12 @@
+﻿@inject NavigationManager NavigationManager
+
+<div class="centered-div">
+    <h1>Thank you for participating</h1>
+    <p>You didn't want to do that?</p>
+    <button class="btn" @onclick="@(() => NavigationManager.NavigateTo("/" + RoomId))">Go back</button>
+</div>
+
+@code {
+    [CascadingParameter]
+    public string RoomId { get; set; }
+}

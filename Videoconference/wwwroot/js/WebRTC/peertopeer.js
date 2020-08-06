@@ -118,3 +118,10 @@ function gotRemoteStream(event) {
     console.log('got remote stream');
     remoteVideo.srcObject = event.stream;
 }
+
+//LIFECYCLE
+function invoke_closeConnection() {
+    peerConnection.close();
+    peerConnection.onicecandidate = null;
+    peerConnection.onaddstream = null;
+}

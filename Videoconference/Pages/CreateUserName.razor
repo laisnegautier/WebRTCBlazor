@@ -1,0 +1,52 @@
+﻿@using System.ComponentModel.DataAnnotations
+@inject IJSRuntime JSRuntime
+
+<div class="centered-div">
+    <h1>Choose a user name</h1>
+
+    <EditForm Model="model" OnValidSubmit="SetUserName">
+        <DataAnnotationsValidator />
+
+        <label for="inputTextUserName" class="sr-only">Choose a user name.</label>
+        <div class="input-group mb-3">
+            <InputText id="inputTextUserName" @bind-Value="model.UserName" placeholder="User name" class="inputEditForm form-control" />
+        </div>
+        <ValidationMessage For="() => model.UserName" class="pb-3" />
+
+        <button type="submit" class="btn">Choose this user name</button>
+    </EditForm>
+</div>
+
+@code {
+        [Parameter]
+        public EventCallback<string> OnUserNameSet { get; set; }
+        string userNameCookie;
+
+        Model model = new Model();
+    class Model
+    {
+        [Required(ErrorMessage = "Insert a user name.")]
+        [MinLength(2, ErrorMessage = "At least 2 characters must be inserted.")]
+        [MaxLength(20, ErrorMessage = "Insert less than 20 characters.")]
+        [RegularExpression(@"^[a-zA-Z0-9-_+\u00C0-\u017F]{0,}$", ErrorMessage = "Only letters (no accent), numbers and -+_ symbols are allowed.")]
+        public string UserName { get; set; }
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            userNameCookie = await JSRuntime.InvokeAsync<string>("getCookie", "userNameVideoconference");
+            if (!String.IsNullOrEmpty(userNameCookie))
+                model.UserName = userNameCookie;
+
+            StateHasChanged();
+        }
+    }
+
+    async Task SetUserName()
+    {
+        var test = await JSRuntime.InvokeAsync<string>("setCookie", "userNameVideoconference", model.UserName, 1);
+        await OnUserNameSet.InvokeAsync(model.UserName);
+    }
+}

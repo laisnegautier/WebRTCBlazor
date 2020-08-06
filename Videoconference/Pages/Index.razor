@@ -1,19 +1,36 @@
 ﻿@page "/"
 @page "/{RoomId}"
 
-
 @if (String.IsNullOrEmpty(RoomId))
 {
     <CreateRoom />
 }
 else
 {
-    <CascadingValue Value="RoomId">
-        <Videoboard />
-    </CascadingValue>
+    if (userNameIsNotSet)
+    {
+        <CreateUserName OnUserNameSet="SetUserName" />
+    }
+    else
+    {
+        <CascadingValue Value="RoomId">
+            <CascadingValue Value="UserName">
+                <Videoboard2 />
+            </CascadingValue>
+        </CascadingValue>
+    }
 }
 
 @code {
     [Parameter]
     public string RoomId { get; set; }
+
+    protected string UserName { get; set; }
+    bool userNameIsNotSet = true;
+
+    void SetUserName(string userName)
+    {
+        userNameIsNotSet = false;
+        UserName = userName;
+    }
 }
