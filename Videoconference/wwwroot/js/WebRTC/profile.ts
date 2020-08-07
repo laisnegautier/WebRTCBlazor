@@ -179,6 +179,8 @@ async function invokable_initClient(connectionId: string, roomId: string): Promi
     console.log("INVOKABLE: initClient");
     client = new Client(connectionId, { roomId: roomId });
     await client.getUserMedia();
+    (window as any).DotNet.invokeMethodAsync('Videoconference', 'ClientHasBeenFixed');
+    (window as any).DotNet.invokeMethodAsync('Videoconference', 'StartCall');
 }
 
 async function invokable_peeringAlreadyExists(clientAnswering: string): Promise<boolean> {

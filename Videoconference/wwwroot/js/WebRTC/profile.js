@@ -140,6 +140,8 @@ async function invokable_initClient(connectionId, roomId) {
     console.log("INVOKABLE: initClient");
     client = new Client(connectionId, { roomId: roomId });
     await client.getUserMedia();
+    window.DotNet.invokeMethodAsync('Videoconference', 'ClientHasBeenFixed');
+    window.DotNet.invokeMethodAsync('Videoconference', 'StartCall');
 }
 async function invokable_peeringAlreadyExists(clientAnswering) {
     let peering = client.getPeeringByAnsweringClient(clientAnswering) || client.getPeeringByOfferingClient(clientAnswering);

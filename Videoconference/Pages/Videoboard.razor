@@ -51,7 +51,7 @@ else
             </ul>
         </div>
 
-        <nav class="navbar fixed-bottom navbar-dark bg-dark toolbarSignalR">
+        @*<nav class="navbar fixed-bottom navbar-dark bg-dark toolbarSignalR">
             <h3 class="navbar-brand">State</h3>
             <ul>
                 <li>RoomID: @RoomId</li>
@@ -59,7 +59,7 @@ else
                 <li>Connection State: <span>@HubConnection.State</span></li>
                 <li>Connection ID: <span>@HubConnection.ConnectionId</span></li>
             </ul>
-        </nav>
+        </nav>*@
     </div>
 }
 
@@ -81,17 +81,25 @@ else
     protected override async Task OnInitializedAsync()
     {
         SendIceCandidateFunc = SendIceCandidateInvoke;
+        CallFunc = CallInvoke;
+        ClientFixedFunc = ClientFixedInvoke;
 
         await InitializeAndAddToHubAsync();
     }
 
+    bool clientHasBeenFixed = false;
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
+        if(!clientHasBeenFixed) await JSRuntime.InvokeVoidAsync("invokable_initClient", HubConnection.ConnectionId, RoomId);
+
         // Very important to not load this twice
         if (firstRender)
         {
             //await JSRuntime.InvokeVoidAsync("invokable_initializeGrid");
+
+
         }
+        //await CallEveryone();
     }
 
     async Task InitializeAndAddToHubAsync()
@@ -251,7 +259,23 @@ else
     }
 
 
+    [JSInvokable]
+    public static void StartCall()
+    {
+        CallFunc.Invoke();
+    }
 
+    static Func<Task> CallFunc;
+    async Task CallInvoke()
+        => await CallEveryone();
+
+    [JSInvokable]
+    public static void ClientHasBeenFixed()
+    {
+        ClientFixedFunc.Invoke();
+    }
+    static Action ClientFixedFunc;
+    void ClientFixedInvoke() => clientHasBeenFixed = true;
 
 
     async Task ShareScreen()
