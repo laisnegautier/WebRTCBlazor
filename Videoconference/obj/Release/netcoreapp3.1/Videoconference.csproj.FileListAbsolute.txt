@@ -65,3 +65,9 @@ C:\Users\Gautier\source\repos\KarmaFlights\Videoconference\Videoconference\obj\R
 C:\Users\Gautier\source\repos\KarmaFlights\Videoconference\Videoconference\obj\Release\netcoreapp3.1\Videoconference.dll
 C:\Users\Gautier\source\repos\KarmaFlights\Videoconference\Videoconference\obj\Release\netcoreapp3.1\Videoconference.pdb
 C:\Users\Gautier\source\repos\KarmaFlights\Videoconference\Videoconference\obj\Release\netcoreapp3.1\Videoconference.genruntimeconfig.cache
+C:\Users\Gautier\source\repos\KarmaFlights\Videoconference\Videoconference\bin\Release\netcoreapp3.1\Properties\ServiceDependencies\videoconferenceWebrtc - Web Deploy\profile.arm.json
+C:\Users\Gautier\source\repos\KarmaFlights\Videoconference\Videoconference\bin\Release\netcoreapp3.1\tsconfig.json
+C:\Users\Gautier\source\repos\KarmaFlights\Videoconference\Videoconference\obj\Release\netcoreapp3.1\RazorDeclaration\Pages\CreateUserName.razor.g.cs
+C:\Users\Gautier\source\repos\KarmaFlights\Videoconference\Videoconference\obj\Release\netcoreapp3.1\RazorDeclaration\Pages\LeavingVideoconference.razor.g.cs
+C:\Users\Gautier\source\repos\KarmaFlights\Videoconference\Videoconference\obj\Release\netcoreapp3.1\Razor\Pages\CreateUserName.razor.g.cs
+C:\Users\Gautier\source\repos\KarmaFlights\Videoconference\Videoconference\obj\Release\netcoreapp3.1\Razor\Pages\LeavingVideoconference.razor.g.cs

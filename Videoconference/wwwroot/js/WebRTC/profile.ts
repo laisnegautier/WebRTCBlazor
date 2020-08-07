@@ -3,7 +3,7 @@ interface Room { roomId: string; }
 class Client {
     connectionId: string;
     room: Room;
-    localVideo;
+    localVideo: HTMLMediaElement;
     localStream: MediaStream;
 
     peerings: Array<Peering>;
@@ -24,7 +24,7 @@ class Client {
                 this.localStream = stream;
                 this.localVideo.srcObject = stream;
             } catch (error) {
-                console.error('Error opening video camera.', error);
+                console.error('Error sharing screen.', error);
             }
         }
         else {
@@ -32,7 +32,44 @@ class Client {
         }
     }
 
-    addRemoteVideo(): void {
+    async getDisplayMedia(): Promise<void> {
+        const mediaDevices = navigator.mediaDevices as any;
+        if (mediaDevices.getDisplayMedia) {
+            try {
+                let constraints: any =
+                {
+                    video: {
+                        //cursor: 'always' | 'motion' | 'never',
+                        //displaySurface: 'application' | 'browser' | 'monitor' | 'window'
+                        cursor: 1 | 2 | 3,
+                        displaySurface: 1 | 2 | 3 | 4
+                    }
+                }
+                const screenStream = await mediaDevices.getDisplayMedia(constraints);
+
+                this.localStream = screenStream;
+                this.localVideo.srcObject = screenStream;
+
+                let videoTrack = screenStream.getVideoTracks()[0];
+                this.peerings.forEach(peering => {
+                    var sender = peering.peerConnection.getSenders().find(function (s) {
+                        return s.track.kind == videoTrack.kind;
+                    });
+                    console.log('found sender:', sender);
+                    sender.replaceTrack(videoTrack);
+                });
+            } catch (error) {
+                console.error('Error opening video camera.', error);
+            }
+        }
+        else {
+            alert('Your browser does not support sharing screen.');
+            console.log('Your browser does not support sharing screen.');
+        }
+    }
+
+    addRemoteVideo(stream: MediaStream): void {
+
     }
 
     getPeeringByOfferingClient(clientOffering: string) {
@@ -51,18 +88,19 @@ class Peering {
     clientOffering: string;
     clientAnswering: string;
 
-    remoteVideo: HTMLMediaElement;
+    remoteVideo: any;
+    generatedId: string = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
 
     peerConnectionConfig: RTCConfiguration;
     peerConnection: RTCPeerConnection;
 
     constructor(clientOffering: string, clientAnswering: string) {
+        console.log("PEERING CONSTRUCTOR");
         this.clientOffering = clientOffering;
         this.clientAnswering = clientAnswering;
         this.peerConnectionConfig = { 'iceServers': [{ 'urls': 'stun:stun.services.mozilla.com' }, { 'urls': 'stun:stun.l.google.com:19302' }] };
         this.peerConnection = new RTCPeerConnection(this.peerConnectionConfig);
 
-        this.remoteVideo = document.querySelector("#remoteVideo");
         this.peerConnection.onicecandidate = (event) => this.onDetectIceCandidate(event, this);
         this.peerConnection.ontrack = (event) => this.gotRemoteStream(event, this);
     }
@@ -82,9 +120,22 @@ class Peering {
         });
     }
 
-    gotRemoteStream(event, peeringObj: Peering): void {
+    gotRemoteStream(event: any, peeringObj: Peering): void {
         console.log('got remote stream');
+
+        this.remoteVideo = document.getElementById(this.generatedId);
+        if (!this.remoteVideo) {
+            this.remoteVideo = document.createElement('video');
+            this.remoteVideo.classList.add('video');
+            this.remoteVideo.setAttribute('id', this.generatedId);
+            this.remoteVideo.autoplay = true;
+            document.querySelector('.videoboard').appendChild(this.remoteVideo);
+
+            console.log("Video ID " + this.generatedId + " for displaying: " + peeringObj.clientAnswering + " or " + peeringObj.clientOffering);
+        }
+        
         peeringObj.remoteVideo.srcObject = event.streams[0];
+        //adaptVideos();
     }
 
     //Pairing through signaling
@@ -128,6 +179,16 @@ async function invokable_initClient(connectionId: string, roomId: string): Promi
     console.log("INVOKABLE: initClient");
     client = new Client(connectionId, { roomId: roomId });
     await client.getUserMedia();
+}
+
+async function invokable_peeringAlreadyExists(clientAnswering: string): Promise<boolean> {
+    let peering: Peering = client.getPeeringByAnsweringClient(clientAnswering) || client.getPeeringByOfferingClient(clientAnswering);
+    if (peering) {
+        return true;
+    }
+    else {
+        return false;
+    }
 }
 
 //to initialize the peering object with the answering client id in it
@@ -197,4 +258,87 @@ async function invokable_onReceiveIceCandidate(iceCandidate: string, sender: str
 
     console.log(peering);
     peering.peerConnection.addIceCandidate(iceCandidateObj);
+}
+
+
+let nbVideos = 1;
+
+let vpWidth = window.innerWidth;
+let vpHeight = window.innerHeight;
+console.log(vpWidth);
+console.log(vpHeight);
+
+//function invokable_initializeGrid() {
+//    window.addEventListener('resize', () => {
+//        vpWidth = window.innerWidth;
+//        vpHeight = window.innerHeight;
+//        adaptVideos();
+//    });
+
+//    if (client) {
+//        nbVideos = client.numberOfVideoDivs;
+//    }
+
+//    //let i = 0;
+//    //for (i = 0; i < nbVideos - 2; i++) {
+//    //    var d = document.createElement('div')
+//    //    d.classList.add('video')
+//    //    document.querySelector('.videoboard').appendChild(d)
+//    //}
+
+//    adaptVideos();
+//};
+
+function adaptVideos() {
+    let listVideo: NodeListOf<HTMLMediaElement> = document.querySelectorAll('.video');
+
+    let optimalVideoWidth = getVideoWidth(nbVideos, vpWidth, vpHeight);
+    let optimalVideoHeight = ~~((3 / 4) * optimalVideoWidth); //int version
+    listVideo.forEach((video, index, array) => {
+        video.style.width = optimalVideoWidth + "px";
+        video.style.height = optimalVideoHeight + "px";
+        video.style.animation = "colorchange 3s ease-in-out " + index / 10 + "s infinite alternate";
+    });
+}
+
+function getVideoWidth(nbVideos: any, vpWidth: any, vpHeight: any) {
+    let nbVideosPerCol = 0;
+    let videoWidth = 0;
+    let videoHeight = 0;
+    let nbRows = 0;
+    let heightAllLines = 0;
+
+    while (nbVideosPerCol <= nbVideos) {
+        console.log("NEW LOOP: nbVideosPerCol: " + nbVideosPerCol);
+
+        videoWidth = ~~(vpWidth / nbVideosPerCol);
+        console.log("videoWidth: " + videoWidth);
+
+        nbRows = Math.floor(nbVideos / nbVideosPerCol) + ((nbVideos % nbVideosPerCol == 0) ? 0 : 1);
+        console.log("nbRows: " + nbRows);
+
+        videoHeight = ~~((3 / 4) * videoWidth);
+        console.log("videoHeight: " + videoHeight);
+
+        heightAllLines = nbRows * videoHeight;
+        console.log("heightAllLines: " + heightAllLines);
+
+        if (heightAllLines <= vpHeight) {
+            console.log(videoWidth);
+            return videoWidth;
+        }
+
+        //Exception to avoid the videos to disappear when they are on one line
+        if (nbRows == 1) {
+            return videoWidth;
+        }
+
+        nbVideosPerCol += 1;
+    }
+}
+
+
+//OTHERS
+async function invokable_shareScreen(): Promise<void> {
+    await client.getDisplayMedia();
 }

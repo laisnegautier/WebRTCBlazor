@@ -27,6 +27,7 @@
           "Microsoft.AspNetCore.SignalR.Client": "3.1.6",
           "Microsoft.TypeScript.MSBuild": "3.9.7",
           "Microsoft.VisualStudio.Azure.Containers.Tools.Targets": "1.10.9",
+          "es6-promise.TypeScript.DefinitelyTyped": "0.7.7",
           "Microsoft.AspNetCore.Antiforgery": "3.1.0.0",
           "Microsoft.AspNetCore.Authentication.Abstractions": "3.1.0.0",
           "Microsoft.AspNetCore.Authentication.Cookies": "3.1.0.0",
@@ -301,6 +302,7 @@
           "Videoconference.dll": {}
         }
       },
+      "es6-promise.TypeScript.DefinitelyTyped/0.7.7": {},
       "Microsoft.AspNetCore.Connections.Abstractions/3.1.6": {
         "dependencies": {
           "Microsoft.AspNetCore.Http.Features": "3.1.6",
@@ -2171,6 +2173,13 @@
       "type": "project",
       "serviceable": false,
       "sha512": ""
+    },
+    "es6-promise.TypeScript.DefinitelyTyped/0.7.7": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-q6+3yC7SLEyKpThVvDS+mJHp2+BEjhY2VduIDiji4SQm27krS+18tkVk5AYkxKpEeWx/8xB7sYSdOERnYTWXjw==",
+      "path": "es6-promise.typescript.definitelytyped/0.7.7",
+      "hashPath": "es6-promise.typescript.definitelytyped.0.7.7.nupkg.sha512"
     },
     "Microsoft.AspNetCore.Connections.Abstractions/3.1.6": {
       "type": "package",

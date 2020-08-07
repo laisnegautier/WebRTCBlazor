@@ -1,9 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "7MTtedLnW6kVB20gpdqG+PeG611KEK1ewfMBmfQSHViH7f1PchJE3YsTd1sQS+LCJqNnpY9EUzbi6CBLRRBwsQ==",
+  "dgSpecHash": "VSTxsobE/CBJ522g523aOdJXIZJ0+lK6s3R3EUf6pZgKGxNXQMKAJhsVT6bLuBX8dUPeU8BjCOUQ2mmGvfa5Sg==",
   "success": true,
   "projectFilePath": "C:\\Users\\Gautier\\source\\repos\\KarmaFlights\\Videoconference\\Videoconference\\Videoconference.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\Gautier\\.nuget\\packages\\es6-promise.typescript.definitelytyped\\0.7.7\\es6-promise.typescript.definitelytyped.0.7.7.nupkg.sha512",
     "C:\\Users\\Gautier\\.nuget\\packages\\microsoft.aspnetcore.connections.abstractions\\3.1.6\\microsoft.aspnetcore.connections.abstractions.3.1.6.nupkg.sha512",
     "C:\\Users\\Gautier\\.nuget\\packages\\microsoft.aspnetcore.http.connections.client\\3.1.6\\microsoft.aspnetcore.http.connections.client.3.1.6.nupkg.sha512",
     "C:\\Users\\Gautier\\.nuget\\packages\\microsoft.aspnetcore.http.connections.common\\3.1.6\\microsoft.aspnetcore.http.connections.common.3.1.6.nupkg.sha512",

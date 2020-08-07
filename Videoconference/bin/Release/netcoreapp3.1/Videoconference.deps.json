@@ -10,7 +10,7 @@
       "NETCOREAPP",
       "NETCOREAPP3_1"
     ],
-    "languageVersion": "",
+    "languageVersion": "8.0",
     "platform": "",
     "allowUnsafe": false,
     "warningsAsErrors": false,
@@ -25,7 +25,9 @@
       "Videoconference/1.0.0": {
         "dependencies": {
           "Microsoft.AspNetCore.SignalR.Client": "3.1.6",
+          "Microsoft.TypeScript.MSBuild": "3.9.7",
           "Microsoft.VisualStudio.Azure.Containers.Tools.Targets": "1.10.9",
+          "es6-promise.TypeScript.DefinitelyTyped": "0.7.7",
           "Microsoft.AspNetCore.Antiforgery": "3.1.0.0",
           "Microsoft.AspNetCore.Authentication.Abstractions": "3.1.0.0",
           "Microsoft.AspNetCore.Authentication.Cookies": "3.1.0.0",
@@ -300,6 +302,7 @@
           "Videoconference.dll": {}
         }
       },
+      "es6-promise.TypeScript.DefinitelyTyped/0.7.7": {},
       "Microsoft.AspNetCore.Connections.Abstractions/3.1.6": {
         "dependencies": {
           "Microsoft.AspNetCore.Http.Features": "3.1.6",
@@ -543,6 +546,7 @@
           "lib/netcoreapp3.1/Microsoft.Extensions.Primitives.dll": {}
         }
       },
+      "Microsoft.TypeScript.MSBuild/3.9.7": {},
       "Microsoft.VisualStudio.Azure.Containers.Tools.Targets/1.10.9": {},
       "System.IO.Pipelines/4.7.1": {
         "runtime": {
@@ -2170,6 +2174,13 @@
       "serviceable": false,
       "sha512": ""
     },
+    "es6-promise.TypeScript.DefinitelyTyped/0.7.7": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-q6+3yC7SLEyKpThVvDS+mJHp2+BEjhY2VduIDiji4SQm27krS+18tkVk5AYkxKpEeWx/8xB7sYSdOERnYTWXjw==",
+      "path": "es6-promise.typescript.definitelytyped/0.7.7",
+      "hashPath": "es6-promise.typescript.definitelytyped.0.7.7.nupkg.sha512"
+    },
     "Microsoft.AspNetCore.Connections.Abstractions/3.1.6": {
       "type": "package",
       "serviceable": true,
@@ -2288,6 +2299,13 @@
       "sha512": "sha512-X+h3tO383iMbtFxYp6Al4pgBzbfQKJY8/gd4U7+sZy90XeSfnw5SwHyCiRrAePG6kee4zCGsvQHPCqaTZ876hw==",
       "path": "microsoft.extensions.primitives/3.1.6",
       "hashPath": "microsoft.extensions.primitives.3.1.6.nupkg.sha512"
+    },
+    "Microsoft.TypeScript.MSBuild/3.9.7": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-obpLmXWov2GvkYP4X90EiPrH0hCtTgRWjk9xc7GcjZLSfwHSf88j4PVQOdqI0fbKG1ypE4ltp+hTeJY0g9IWag==",
+      "path": "microsoft.typescript.msbuild/3.9.7",
+      "hashPath": "microsoft.typescript.msbuild.3.9.7.nupkg.sha512"
     },
     "Microsoft.VisualStudio.Azure.Containers.Tools.Targets/1.10.9": {
       "type": "package",

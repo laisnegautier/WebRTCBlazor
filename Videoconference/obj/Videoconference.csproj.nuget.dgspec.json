@@ -51,6 +51,10 @@
             "Microsoft.VisualStudio.Azure.Containers.Tools.Targets": {
               "target": "Package",
               "version": "[1.10.9, )"
+            },
+            "es6-promise.TypeScript.DefinitelyTyped": {
+              "target": "Package",
+              "version": "[0.7.7, )"
             }
           },
           "imports": [
