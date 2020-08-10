@@ -5,6 +5,5 @@
   </PropertyGroup>
   <ImportGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
     <Import Project="$(NuGetPackageRoot)microsoft.visualstudio.azure.containers.tools.targets\1.10.9\build\Microsoft.VisualStudio.Azure.Containers.Tools.Targets.targets" Condition="Exists('$(NuGetPackageRoot)microsoft.visualstudio.azure.containers.tools.targets\1.10.9\build\Microsoft.VisualStudio.Azure.Containers.Tools.Targets.targets')" />
-    <Import Project="$(NuGetPackageRoot)microsoft.typescript.msbuild\3.9.7\build\Microsoft.TypeScript.MSBuild.targets" Condition="Exists('$(NuGetPackageRoot)microsoft.typescript.msbuild\3.9.7\build\Microsoft.TypeScript.MSBuild.targets')" />
   </ImportGroup>
 </Project>

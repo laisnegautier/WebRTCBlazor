@@ -38,23 +38,9 @@
       "frameworks": {
         "netcoreapp3.1": {
           "dependencies": {
-            "Microsoft.AspNetCore.SignalR.Client": {
-              "target": "Package",
-              "version": "[3.1.6, )"
-            },
-            "Microsoft.TypeScript.MSBuild": {
-              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
-              "suppressParent": "All",
-              "target": "Package",
-              "version": "[3.9.7, )"
-            },
             "Microsoft.VisualStudio.Azure.Containers.Tools.Targets": {
               "target": "Package",
               "version": "[1.10.9, )"
-            },
-            "es6-promise.TypeScript.DefinitelyTyped": {
-              "target": "Package",
-              "version": "[0.7.7, )"
             }
           },
           "imports": [

@@ -71,3 +71,5 @@ C:\Users\Gautier\source\repos\KarmaFlights\Videoconference\Videoconference\obj\R
 C:\Users\Gautier\source\repos\KarmaFlights\Videoconference\Videoconference\obj\Release\netcoreapp3.1\RazorDeclaration\Pages\LeavingVideoconference.razor.g.cs
 C:\Users\Gautier\source\repos\KarmaFlights\Videoconference\Videoconference\obj\Release\netcoreapp3.1\Razor\Pages\CreateUserName.razor.g.cs
 C:\Users\Gautier\source\repos\KarmaFlights\Videoconference\Videoconference\obj\Release\netcoreapp3.1\Razor\Pages\LeavingVideoconference.razor.g.cs
+C:\Users\Gautier\source\repos\KarmaFlights\Videoconference\Videoconference\obj\Release\netcoreapp3.1\RazorDeclaration\Pages\Test.razor.g.cs
+C:\Users\Gautier\source\repos\KarmaFlights\Videoconference\Videoconference\obj\Release\netcoreapp3.1\Razor\Pages\Test.razor.g.cs

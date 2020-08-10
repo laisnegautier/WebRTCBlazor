@@ -54,7 +54,6 @@ namespace Videoconference
             {
                 endpoints.MapBlazorHub();
                 endpoints.MapFallbackToPage("/_Host");
-                endpoints.MapHub<WebRTCHub>("/webRTCHub");
                 endpoints.MapHub<PeeringHub>("/peeringHub");
             });
         }

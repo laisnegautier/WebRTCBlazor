@@ -134,7 +134,6 @@ class Peering {
             this.remoteVideo.classList.add('video');
             this.remoteVideo.setAttribute('id', this.generatedId);
             this.remoteVideo.autoplay = true;
-            this.remoteVideo.playsInline = true;
             document.querySelector('.videoboard').appendChild(this.remoteVideo);
 
             //console.log("Video ID " + this.generatedId + " for displaying: " + peeringObj.clientAnswering + " or " + peeringObj.clientOffering);
