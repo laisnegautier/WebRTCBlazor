@@ -1,5 +1,6 @@
 ﻿@page "/"
 @page "/{RoomId}"
+@inject IJSRuntime JSRuntime
 
 @if (String.IsNullOrEmpty(RoomId))
 {
@@ -13,7 +14,7 @@ else
     }
     else
     {
-        <Videoboard RoomId="@RoomId" UserName="@UserName" />
+        <Test RoomId="@RoomId" UserName="@UserName" />
     }
 }
 
@@ -24,9 +25,10 @@ else
     protected string UserName { get; set; }
     bool userNameIsNotSet = true;
 
-    void SetUserName(string userName)
+    async Task SetUserName(string userName)
     {
         userNameIsNotSet = false;
         UserName = userName;
+        await JSRuntime.InvokeVoidAsync("invokable_initVideoconference", RoomId, UserName);
     }
 }

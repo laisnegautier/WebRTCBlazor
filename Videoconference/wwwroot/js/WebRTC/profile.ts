@@ -58,6 +58,8 @@ class Client {
                     console.log('found sender:', sender);
                     sender.replaceTrack(videoTrack);
                 });
+
+                videoTrack.onended = this.screenSharingStop;
             } catch (error) {
                 console.error('Error opening video camera.', error);
             }
@@ -65,6 +67,33 @@ class Client {
         else {
             alert('Your browser does not support sharing screen.');
             console.log('Your browser does not support sharing screen.');
+        }
+    }
+
+    async screenSharingStop(event: any): Promise<void> {
+        if (navigator.getUserMedia) {
+            try {
+                const constraints = { 'video': true, 'audio': true };
+                const stream = await navigator.mediaDevices.getUserMedia(constraints);
+
+                this.localStream = stream;
+                this.localVideo.srcObject = stream;
+
+                let videoTrack = stream.getVideoTracks()[0];
+
+                this.peerings.forEach(peering => {
+                    var sender = peering.peerConnection.getSenders().find(function (s) {
+                        return s.track.kind == videoTrack.kind;
+                    });
+                    console.log('found sender:', sender);
+                    sender.replaceTrack(videoTrack);
+                });
+            } catch (error) {
+                console.error('Error sharing screen.', error);
+            }
+        }
+        else {
+            console.log('Your browser does not support getUserMedia API');
         }
     }
 
@@ -343,4 +372,7 @@ function getVideoWidth(nbVideos: any, vpWidth: any, vpHeight: any) {
 //OTHERS
 async function invokable_shareScreen(): Promise<void> {
     await client.getDisplayMedia();
+}
+async function invokable_stopSharingScreen(): Promise<void> {
+    await client.getUserMedia();
 }

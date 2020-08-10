@@ -1,0 +1,27 @@
+﻿<div class="videoboard">
+    <video id="localVideo" class="video" autoplay muted></video>
+</div>
+
+<div class="toolbar-connectivity">
+    <ul>
+        <li><button class="btn"><span class="oi oi-monitor" aria-hidden="true"></span> Start</button></li>
+        <li><button class="btn"><span class="oi oi-camera-slr" aria-hidden="true"></span> Disable camera</button></li>
+        <li><button class="btn"><span class="oi oi-microphone" aria-hidden="true"></span> Disable microphone</button></li>
+        <li><button class="btn"><span class="oi oi-circle-x" aria-hidden="true"></span> Quit the videoconference</button></li>
+    </ul>
+</div>
+<div style="">
+    <div class="connected-users">
+        <h3>Group state</h3>
+        <ul class="list-unstyled">
+        </ul>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public string RoomId { get; set; }
+
+    [Parameter]
+    public string UserName { get; set; }
+}

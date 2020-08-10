@@ -106,3 +106,5 @@ C:\Users\Gautier\source\repos\KarmaFlights\Videoconference\Videoconference\obj\D
 C:\Users\Gautier\source\repos\KarmaFlights\Videoconference\Videoconference\obj\Debug\netcoreapp3.1\Razor\_Imports.razor.g.cs
 C:\Users\Gautier\source\repos\KarmaFlights\Videoconference\Videoconference\bin\Debug\netcoreapp3.1\tsconfig.json
 C:\Users\Gautier\source\repos\KarmaFlights\Videoconference\Videoconference\obj\Debug\netcoreapp3.1\Videoconference.csprojAssemblyReference.cache
+C:\Users\Gautier\source\repos\KarmaFlights\Videoconference\Videoconference\obj\Debug\netcoreapp3.1\RazorDeclaration\Pages\Test.razor.g.cs
+C:\Users\Gautier\source\repos\KarmaFlights\Videoconference\Videoconference\obj\Debug\netcoreapp3.1\Razor\Pages\Test.razor.g.cs

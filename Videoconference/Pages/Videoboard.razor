@@ -12,17 +12,20 @@
 }
 else
 {
-
-
     <div class="videoboard">
         <video id="localVideo" class="video" autoplay muted></video>
-        @*<video id="remoteVideo" class="video" autoplay></video>*@
-        @*<button type="button" id="start" @onclick="Call">Start Video</button>*@
     </div>
 
     <div class="toolbar-connectivity">
         <ul>
-            <li><button class="btn" @onclick="ShareScreen"><span class="oi oi-monitor" aria-hidden="true"></span> Share your screen</button></li>
+            @if (isSharingScreen)
+            {
+                <li><button class="btn" @onclick="StopSharingScreen"><span class="oi oi-monitor" aria-hidden="true"></span> Stop sharing your screen</button></li>
+            }
+            else
+            {
+                <li><button class="btn" @onclick="ShareScreen"><span class="oi oi-monitor" aria-hidden="true"></span> Share your screen</button></li>
+            }
             <li><button class="btn"><span class="oi oi-camera-slr" aria-hidden="true"></span> Disable camera</button></li>
             <li><button class="btn"><span class="oi oi-microphone" aria-hidden="true"></span> Disable microphone</button></li>
             <li><button class="btn" @onclick="LeaveVideoconference"><span class="oi oi-circle-x" aria-hidden="true"></span> Quit the videoconference</button></li>
@@ -77,6 +80,7 @@ else
     HubConnection HubConnection;
     List<string> groupMessages = new List<string>();
 
+    bool isSharingScreen = false;
 
     protected override async Task OnInitializedAsync()
     {
@@ -96,8 +100,6 @@ else
         if (firstRender)
         {
             //await JSRuntime.InvokeVoidAsync("invokable_initializeGrid");
-
-
         }
         //await CallEveryone();
     }
@@ -281,5 +283,11 @@ else
     async Task ShareScreen()
     {
         await JSRuntime.InvokeVoidAsync("invokable_shareScreen");
+        isSharingScreen = true;
+    }
+    async Task StopSharingScreen()
+    {
+        await JSRuntime.InvokeVoidAsync("invokable_stopSharingScreen");
+        isSharingScreen = false;
     }
 }
